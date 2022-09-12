@@ -79,7 +79,7 @@ function pairMobileDevicesWithUserIds(userArray, mobileDevices) {
 
 function pairMobileDevicesWithIotDevices(iotDevices, users) {
 	iotDevices.forEach((device) => {
-		const { id, mobile } = device;
+		const { mobile, name } = device;
 
 		const matchedUser = users.find((user) => {
 			return user.mobileDevices.includes(mobile);
@@ -87,9 +87,9 @@ function pairMobileDevicesWithIotDevices(iotDevices, users) {
 
 		if (matchedUser) {
 			if (!matchedUser.iotDevices) {
-				matchedUser.iotDevices = [id];
+				matchedUser.iotDevices = [name];
 			} else {
-				matchedUser.iotDevices.push(id);
+				matchedUser.iotDevices.push(name);
 			}
 		}
 	});
@@ -113,7 +113,7 @@ function count(users, mobileDevices, iotDevices) {
 	const iotDevicesCountPerUserName = usersWithIotDevices.map((user) => {
 		return {
 			name: user.name,
-			iotDevicesCount: user.iotDevices.length,
+			iotDevicesCount: [...new Set(user.iotDevices)].length,
 		};
 	});
 
