@@ -24,13 +24,67 @@ const path = require('path');
 })();
 
 function removeNonLettersFromString(string) {
-	return string.match(/([A-Z])\w+/g, '');
+	return string.match(/([A-Z])\w+/g, '')[0];
+}
+
+function getCombinedUserIds(users) {
+	// need create datasets with ids that have same username
+	const userNames = [];
+
+	users.forEach((user) => {
+		const { name } = user;
+
+		const onlyName = removeNonLettersFromString(name);
+
+		//find if name already exists in userNames array
+		const userWithSameName = userNames.find((user) => {
+			return user.name === onlyName;
+		});
+
+		if (userWithSameName) {
+			userWithSameName.uuidList.push(user.id);
+		}
+
+		if (!userWithSameName) {
+			userNames.push({
+				name: onlyName,
+				uuidList: [user.id],
+			});
+		}
+	});
+
+	return userNames;
+}
+
+function pairMobileDevicesWithUserIds(userArray, mobileDevices) {
+	//pair mobile devices with user name
+	mobileDevices.forEach((device) => {
+		const { user, id } = device;
+
+		const matchedUser = userArray.find((searchedUser) => {
+			return searchedUser.uuidList.includes(user);
+		});
+
+		if (matchedUser) {
+			if (!matchedUser.mobileDevices) {
+				matchedUser.mobileDevices = [id];
+			}
+			matchedUser.mobileDevices.push(id);
+		}
+	});
+
+	return userArray;
 }
 
 function count(users, mobileDevices, iotDevices) {
-	const alreadyPickedNames = [];
+	const userIdsWithSameUserNames = getCombinedUserIds(users);
 
-	// need create datasets with ids that have same username
+	const usersWithMobileDevicesIds = pairMobileDevicesWithUserIds(
+		userIdsWithSameUserNames,
+		mobileDevices
+	);
+
+	return usersWithMobileDevicesIds;
 }
 
 count();
