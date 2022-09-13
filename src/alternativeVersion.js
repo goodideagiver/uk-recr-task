@@ -105,9 +105,9 @@ function addIotDevicesIdsToUsers(iotDevices, users, isSimple = true) {
 			if (matchedUsers.length > 0) {
 				matchedUsers.forEach((matchedUser) => {
 					if (!matchedUser.iotDevices) {
-						matchedUser.iotDevices = [id];
+						matchedUser.iotDevices = [device];
 					} else {
-						matchedUser.iotDevices.push(id);
+						matchedUser.iotDevices.push(device);
 					}
 				});
 			}
@@ -115,6 +115,11 @@ function addIotDevicesIdsToUsers(iotDevices, users, isSimple = true) {
 	});
 
 	return users;
+}
+
+function getPrimitiveArrayUniqueValues(array) {
+	if (!Array.isArray(array)) return [];
+	return [...new Set(array)];
 }
 
 function count(users, mobileDevices, iotDevices) {
@@ -135,6 +140,10 @@ function count(users, mobileDevices, iotDevices) {
 		return {
 			name: user.name,
 			iotDevicesCount: user.iotDevices?.length || 0,
+			mobileDevicesCount: user.mobileDevices?.length || 0,
+			uniqueIotDevicesCount: getPrimitiveArrayUniqueValues(
+				user.iotDevices?.map((device) => device.name)
+			).length,
 		};
 	});
 
