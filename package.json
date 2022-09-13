@@ -6,6 +6,7 @@
 	"license": "MIT",
 	"scripts": {
 		"start": "node src/index.js",
+		"alt": "node src/alternativeVersion.js",
 		"generate": "node src/generate-data.js"
 	},
 	"dependencies": {
