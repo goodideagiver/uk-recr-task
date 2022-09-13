@@ -123,7 +123,6 @@ function getPrimitiveArrayUniqueValues(array) {
 }
 
 function count(users, mobileDevices, iotDevices) {
-	debugger;
 	const userIdsWithSameUserNames = getCombinedUserIds(users);
 
 	const usersWithMobileDevicesIds = addMobileIdsToUsers(

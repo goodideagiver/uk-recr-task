@@ -118,7 +118,6 @@ function addIotDevicesIdsToUsers(iotDevices, users, isSimple = true) {
 }
 
 function count(users, mobileDevices, iotDevices) {
-	debugger;
 	const userIdsWithSameUserNames = getCombinedUserIds(users);
 
 	const usersWithMobileDevicesIds = addMobileIdsToUsers(
