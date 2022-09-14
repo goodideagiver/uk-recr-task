@@ -79,38 +79,22 @@ function addMobileIdsToUsers(userArray, mobileDevices) {
 	return userArray;
 }
 
-function addIotDevicesIdsToUsers(iotDevices, users, isSimple = true) {
+function addIotDevicesIdsToUsers(iotDevices, users) {
 	iotDevices.forEach((device) => {
 		const { id, mobile } = device;
 
-		if (isSimple) {
-			const matchedUser = users.find((user) => {
-				return user.mobileDevices?.includes(mobile);
-			});
+		const matchedUsers = users.filter((user) => {
+			return user.mobileDevices?.includes(mobile);
+		});
 
-			if (matchedUser) {
+		if (matchedUsers.length > 0) {
+			matchedUsers.forEach((matchedUser) => {
 				if (!matchedUser.iotDevices) {
 					matchedUser.iotDevices = [id];
 				} else {
 					matchedUser.iotDevices.push(id);
 				}
-			}
-		}
-
-		if (!isSimple) {
-			const matchedUsers = users.filter((user) => {
-				return user.mobileDevices?.includes(mobile);
 			});
-
-			if (matchedUsers.length > 0) {
-				matchedUsers.forEach((matchedUser) => {
-					if (!matchedUser.iotDevices) {
-						matchedUser.iotDevices = [id];
-					} else {
-						matchedUser.iotDevices.push(id);
-					}
-				});
-			}
 		}
 	});
 
@@ -127,8 +111,7 @@ function count(users, mobileDevices, iotDevices) {
 
 	const usersWithIotDevices = addIotDevicesIdsToUsers(
 		iotDevices,
-		usersWithMobileDevicesIds,
-		false
+		usersWithMobileDevicesIds
 	);
 
 	const iotDevicesCountPerUserName = usersWithIotDevices.map((user) => {
